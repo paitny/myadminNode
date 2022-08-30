@@ -1,0 +1,112 @@
+[
+  {
+    "path": "/profile",
+    "title": "个人中心",
+    "icon": "user",
+    "children": []
+  },
+  {
+    "path": "/userManage",
+    "title": "用户管理",
+    "icon": "personCenter",
+    "children": []
+  },
+  {
+    "path": "/visitor",
+    "title": "最近访客",
+    "icon": "visitor",
+    "children": []
+  },
+  {
+    "path": "/articleMg",
+    "title": "文章",
+    "icon": "article",
+    "children": [
+      {
+        "path": "/articleMg/articleAdd",
+        "title": "添加文章",
+        "icon": "article-add"
+      },
+      {
+        "path": "/articleMg/articleManage",
+        "title": "管理文章",
+        "icon": "article-manage"
+      }
+    ]
+  },
+  {
+    "path": "/linkMg",
+    "title": "友链",
+    "icon": "link",
+    "children": [
+      {
+        "path": "/linkMg/linkAdd",
+        "title": "添加友链",
+        "icon": "link-add"
+      },
+      {
+        "path": "/linkMg/linkManage",
+        "title": "管理有友链",
+        "icon": "link-manage"
+      }
+    ]
+  },
+  {
+    "path": "/feedback",
+    "title": "反馈中心",
+    "icon": "feedback",
+    "children": []
+  },
+  {
+    "path": "/swiperMg",
+    "title": "轮播图",
+    "icon": "swiper",
+    "children": [
+      {
+        "path": "/swiperMg/swiperAdd",
+        "title": "轮播图添加",
+        "icon": "swiper-add"
+      },
+      {
+        "path": "/swiperMg/swiperManage",
+        "title": "轮播图管理",
+        "icon": "swiper-manage"
+      }
+    ]
+  },
+
+  {
+    "path": "/mv",
+    "title": "视频",
+    "icon": "video",
+    "children": [
+      {
+        "path": "/mv/mvAdd",
+        "title": "上传视频",
+        "icon": "video-add"
+      },
+      {
+        "path": "/mv/mvManage",
+        "title": "视频管理",
+        "icon": "video-manage"
+      }
+    ]
+  },
+  {
+    "path": "/art",
+    "title": "管理员文章",
+    "icon": "articleAll",
+    "children": [
+      {
+        "path": "/artMg/artEdit",
+        "title": "文章编辑",
+        "icon": "article-create"
+      },
+      {
+        "path": "/artMg/ranMg",
+        "title": "文章排名",
+        "icon": "article-ranking"
+      }
+    ]
+  }
+]
