@@ -3,6 +3,7 @@ const router = express.Router()
 const multer = require("multer")
 const path = require("path")
 const musicDB = require("../../db/music")
+const articleDB = require("../../db/article");
 
 
 let music_upload = multer({
@@ -107,12 +108,18 @@ router.post("/cover", (req, res) => {
 })
 //文章发表
 router.post("/add", async (req, res) => {
-    let {name, artist,music,lrc, cover,theme} = req.body
+    let {name, artist,url,lrc, cover,theme} = req.body
+    if(!/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(theme)){
+        return res.send({
+            code: 1,
+            msg: "数据格式错误"
+        })
+    }
     let doc = await musicDB.create({
         name: name || undefined,
         artist:artist||undefined,
-        music,
-        lrc: lrc || undefined,
+        url,
+        lrc: lrc || "暂无歌词",
         cover:cover||undefined,
         theme:theme||undefined,
 
@@ -124,6 +131,39 @@ router.post("/add", async (req, res) => {
         data: {id: doc._id}
     })
 })
+//音乐修改
+router.post("/update", async (req, res) => {
+    let {id, doc} = req.body
+    await musicDB.findByIdAndUpdate(id,doc)
+
+    res.send({
+        code: 0,
+        msg: "修改成功"
+    })
+})
+
+//音乐删除
+router.delete("/delete", async (req, res) => {
+    let {id} = req.body
+
+    await musicDB.findByIdAndRemove(id)
+
+    res.send({
+        code: 0,
+        msg: "删除完成"
+    })
+})
+
+router.post("/lrcupdate", async (req, res) => {
+    let {id, doc} = req.body
+    await musicDB.findByIdAndUpdate(id,doc)
+
+    res.send({
+        code: 0,
+        msg: "修改成功"
+    })
+})
+
 module.exports = router
 
 

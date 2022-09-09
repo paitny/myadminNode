@@ -26,8 +26,6 @@ app.get("*", (req, res)=>{
   res.sendFile( require("path").join(__dirname, './public/index.html') )
 })
 
-
-//
 app.get("./", (req, res)=>{
   res.sendFile( require("path").join(__dirname, './public/myadmin/index.html') )
 })

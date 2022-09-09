@@ -9,9 +9,6 @@ router.post('/createArticle', async (req, res) => {
         description,
         content,
     } = req.body
-    console.log( title,
-        description,
-        content,)
 
     const { user } = req.session.userInfo
     if (!title || !description || !content) {
@@ -68,7 +65,6 @@ router.post('/reviseRank', async (req, res) => {
         first,
         second
     } = req.body
-    console.log(1111);
     let firstIndex = first.rank //被拖拽dom的index值
     let secondIndex = second.rank //被替换dom的index值
 

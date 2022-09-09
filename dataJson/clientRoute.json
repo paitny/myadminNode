@@ -108,5 +108,22 @@
         "icon": "article-ranking"
       }
     ]
+  },
+  {
+    "path": "/music",
+    "title": "管理员音乐",
+    "icon": "musiclist",
+    "children": [
+      {
+        "path": "/music/micAdd",
+        "title": "音乐添加",
+        "icon": "music-add"
+      },
+      {
+        "path": "/music/micMg",
+        "title": "音乐管理",
+        "icon": "music-manage"
+      }
+    ]
   }
 ]

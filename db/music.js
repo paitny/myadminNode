@@ -13,7 +13,7 @@ let musicSchema = new Schema({
         default:"暂无演唱者"
 
     },
-    music:{
+    url:{
         type:String,
         required:true
     },
@@ -30,7 +30,7 @@ let musicSchema = new Schema({
     //上传日期
     theme:{
         type:String,
-        default:"#fff"
+        default:"#626aef"
 
     },
     date:{
