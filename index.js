@@ -16,7 +16,6 @@ app.use(require("./middleware/session"))
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
-
 app.use(express.static("./public"))
 //路由监听
 app.use("/", require("./router/index"))
