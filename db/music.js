@@ -20,7 +20,7 @@ let musicSchema = new Schema({
     //封面
     cover:{
         type: String,
-        default: "/file/photo/default.jpg"
+        default: "/file/mcover/default.jpg"
     },
     //歌词
     lrc: {

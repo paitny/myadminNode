@@ -51,7 +51,6 @@ let cover_upload = multer({
     })
 }).single('file')
 //上传音乐
-//上传cover封面图
 router.post("/musicAdd", (req, res) => {
     music_upload(req, res, async (err) => {
         //上传失败
@@ -64,13 +63,13 @@ router.post("/musicAdd", (req, res) => {
         //上传成功
         res.send({
             code: 0,
-            msg: "cover上传成功",
+            msg: "音乐上传成功",
             url: `/file/music/${req.music_name}`
         })
     })
 })
 
-//上传cover封面图
+//上传歌词
 router.post("/lrc", (req, res) => {
     lyric_upload(req, res, async (err) => {
         //上传失败
@@ -83,7 +82,7 @@ router.post("/lrc", (req, res) => {
         //上传成功
         res.send({
             code: 0,
-            msg: "cover上传成功",
+            msg: "歌词上传成功",
             url: `/file/lyric/${req.lyric_name}`
         })
     })
@@ -106,15 +105,9 @@ router.post("/cover", (req, res) => {
         })
     })
 })
-//文章发表
+//音乐发表
 router.post("/add", async (req, res) => {
     let {name, artist,url,lrc, cover,theme} = req.body
-    if(!/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(theme)){
-        return res.send({
-            code: 1,
-            msg: "数据格式错误"
-        })
-    }
     let doc = await musicDB.create({
         name: name || undefined,
         artist:artist||undefined,
@@ -122,12 +115,11 @@ router.post("/add", async (req, res) => {
         lrc: lrc || "暂无歌词",
         cover:cover||undefined,
         theme:theme||undefined,
-
     })
 
     res.send({
         code: 0,
-        msg: "文章发表成功",
+        msg: "音乐发布成功",
         data: {id: doc._id}
     })
 })
