@@ -112,7 +112,7 @@ router.post("/add", async (req, res) => {
         name: name || undefined,
         artist:artist||undefined,
         url,
-        lrc: lrc || "暂无歌词",
+        lrc: lrc || undefined,
         cover:cover||undefined,
         theme:theme||undefined,
     })

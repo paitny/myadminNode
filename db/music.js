@@ -25,7 +25,7 @@ let musicSchema = new Schema({
     //歌词
     lrc: {
         type: String,
-        default: "暂无歌词"
+        default: "/file/lyric/default.lrc"
     },
     //上传日期
     theme:{
