@@ -39,6 +39,8 @@ router.use("/consumer",require("./consumer"))
 router.use("/music",require("./music"))
 //后台文章
 router.use("/articleAdmin",require("./articleAdmin"))
+//留言管理
+router.use("/leaveMsg",require("./leaveMsg"))
 module.exports = router
 
 

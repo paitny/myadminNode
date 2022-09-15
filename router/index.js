@@ -25,7 +25,6 @@ router.use("/contact", require("./contact/index"))
 
 //返回各种json数据
 router.use("/route",require("./data/index"))
-
 module.exports = router
 
 

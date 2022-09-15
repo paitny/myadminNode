@@ -23,6 +23,68 @@
 
 ## 2. 接口说明
 
-### 登录接口
+### 普通接口
+//注册
+router.use("/reg",require("./reg/index"))
 
-### 注册接口
+//登录
+router.use("/login", require("./login/index"))
+
+//个人信息修改
+router.use("/personal", require("./personal/index"))
+
+//留言
+router.use("/msg", require("./msg/index"))
+
+//管理员
+router.use("/adminServer", require("./adminServer/index"))
+
+//请求各种数据
+router.use("/get", require("./get/index"))
+
+//反馈消息
+router.use("/contact", require("./contact/index"))
+
+//返回各种json数据
+router.use("/route",require("./data/index"))
+### 后台管理系统接口
+//鉴权
+router.use((req, res, next) => {
+if (!req.session.userInfo || !req.session.userInfo.admin) {
+return res.send({
+code: 6,
+msg: "您不是管理员",
+})
+}
+next()
+})
+
+//check
+router.post("/check", (req, res) => {
+res.send({
+code: 0,
+msg: "您拥有管理员权限",
+data:req.session.userInfo
+})
+})
+
+//友链相关
+router.use("/link", require("./link"))
+
+//文章相关
+router.use("/article", require("./article"))
+
+//contact
+router.use("/contact", require("./contact"))
+//swiper
+router.use("/swiper",require("./swiper"))
+//video
+router.use("/video",require("./video"))
+//用户
+router.use("/consumer",require("./consumer"))
+//音乐
+router.use("/music",require("./music"))
+//后台文章
+router.use("/articleAdmin",require("./articleAdmin"))
+//留言
+router.use("/leaveMsg",require("./leaveMsg"))

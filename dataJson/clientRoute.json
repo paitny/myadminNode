@@ -18,6 +18,12 @@
     "children": []
   },
   {
+    "path": "/LeaveMg",
+    "title": "留言管理",
+    "icon": "LeaveMg",
+    "children": []
+  },
+  {
     "path": "/articleMg",
     "title": "文章",
     "icon": "article",

@@ -1,0 +1,1 @@
+import{I as r}from"./index.e651dd7e.js";const i=e=>r({url:"/api/adminServer/articleAdmin/createArticle",data:e,method:"POST"}),a=e=>r({url:"/api/adminServer/articleAdmin/articleList",params:e}),n=e=>r({url:"/api/adminServer/articleAdmin/reviseRank",data:e,method:"POST"}),c=e=>r({url:"/api/adminServer/articleAdmin/delete",data:e,method:"POST"});export{i as c,c as d,a as g,n as r};

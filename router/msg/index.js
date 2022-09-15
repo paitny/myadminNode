@@ -87,6 +87,7 @@ router.post("/like/parent", async (req, res) => {
 router.post("/like/child", async (req, res) => {
 
   let {pID, cID, cIndex} = req.body
+  console.log(pID,cID,cIndex)
   let parent = await messageDB.findById(pID)
   //验证数据
   if (!parent) {
