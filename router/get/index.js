@@ -143,8 +143,31 @@ router.get("/user", async (req, res) => {
     data: doc
   })
 })
-//请求所有音乐信息
+//请求所有音乐信息进行分页操作
 router.get("/music", async (req, res) => {
+  //文章分页
+  let {page,perPage}=req.query
+  let pages=+page||1
+  let perPages=+perPage||5
+  let doc = await musicDB.find(
+      {},
+      {},
+      {
+        skip:perPages*(pages-1),
+        limit:perPages,
+        sort:{_id:-1}
+      }
+  )
+  const total=await musicDB.countDocuments()
+  res.send({
+    code: 0,
+    msg: "请求完成",
+    data: doc,total
+  })
+})
+//音乐展示
+router.get("/musicAll", async (req, res) => {
+
   let doc = await musicDB.find()
   res.send({
     code: 0,
