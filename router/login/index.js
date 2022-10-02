@@ -77,11 +77,11 @@ const IsLoginPassword=bcrypt.compareSync(pass,doc.pass)
 })
 
 //检测是否登录
-router.post("/check", (req, res) => {
+router.post("/check", async (req, res) => {
   let data = req.session.userInfo
   if (data) {
     //更新visitor
-    addVisitor(req)
+   await addVisitor(req)
     //登录过的
     res.send({
       code: 0,

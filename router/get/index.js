@@ -168,7 +168,7 @@ router.get("/music", async (req, res) => {
 //音乐展示
 router.get("/musicAll", async (req, res) => {
 
-  let doc = await musicDB.find()
+  let doc = await musicDB.find({},{},{sort:{_id:-1}})
   res.send({
     code: 0,
     msg: "请求完成",

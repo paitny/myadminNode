@@ -3,116 +3,137 @@ const router = express.Router()
 const multer = require("multer")
 const path = require("path")
 const articleDB = require("../../db/article")
+const fs = require("fs");
 
 let md_upload = multer({
-  storage: multer.diskStorage({
-    //文件存储的目录
-    destination(req, file, cb) {
-      cb(null, path.join(__dirname, '../../public/file/md'))
-    },
-    //文件的名字
-    filename(req, file, cb) {
-      req.md_name = `md-${Date.now()}.md`
-      cb(null, req.md_name)
-    }
-  })
+    storage: multer.diskStorage({
+        //文件存储的目录
+        destination(req, file, cb) {
+            cb(null, path.join(__dirname, '../../public/file/md'))
+        },
+        //文件的名字
+        filename(req, file, cb) {
+            req.md_name = `md-${Date.now()}.md`
+            cb(null, req.md_name)
+        }
+    })
 }).single('file')
 
 let cover_upload = multer({
-  storage: multer.diskStorage({
-    //文件存储的目录
-    destination(req, file, cb) {
-      cb(null, path.join(__dirname, '../../public/file/cover'))
-    },
-    //文件的名字
-    filename(req, file, cb) {
-      let {ext} = path.parse(file.originalname)
-      req.cover_name = `cover-${Date.now()}${ext}`
-      cb(null, req.cover_name)
-    }
-  })
+    storage: multer.diskStorage({
+        //文件存储的目录
+        destination(req, file, cb) {
+            cb(null, path.join(__dirname, '../../public/file/cover'))
+        },
+        //文件的名字
+        filename(req, file, cb) {
+            let {ext} = path.parse(file.originalname)
+            req.cover_name = `cover-${Date.now()}${ext}`
+            cb(null, req.cover_name)
+        }
+    })
 }).single('file')
 
 //上传md
 router.post("/md", (req, res) => {
 
-  md_upload(req, res, async (err) => {
-    //上传失败
-    if (err) {
-      return res.send({
-        code: 9,
-        msg: "上传失败"
-      })
-    }
-    //上传成功
-    res.send({
-      code: 0,
-      msg: "md上传成功",
-      url: `/file/md/${req.md_name}`
+    md_upload(req, res, async (err) => {
+        //上传失败
+        if (err) {
+            return res.send({
+                code: 9,
+                msg: "上传失败"
+            })
+        }
+        //上传成功
+        res.send({
+            code: 0,
+            msg: "md上传成功",
+            url: `/file/md/${req.md_name}`
+        })
     })
-  })
 })
 
 //上传cover封面图
 router.post("/cover", (req, res) => {
-  cover_upload(req, res, async (err) => {
-    //上传失败
-    if (err) {
-      return res.send({
-        code: 9,
-        msg: "上传失败"
-      })
-    }
-    //上传成功
-    res.send({
-      code: 0,
-      msg: "cover上传成功",
-      url: `/file/cover/${req.cover_name}`
+    cover_upload(req, res, async (err) => {
+        //上传失败
+        if (err) {
+            return res.send({
+                code: 9,
+                msg: "上传失败"
+            })
+        }
+        //上传成功
+        res.send({
+            code: 0,
+            msg: "cover上传成功",
+            url: `/file/cover/${req.cover_name}`
+        })
     })
-  })
 })
 
 //文章发表
 router.post("/add", async (req, res) => {
-  let {title, des, md, cover} = req.body
+    let {title, des, md, cover} = req.body
 
-  let doc = await articleDB.create({
-    title: title || undefined,
-    des: des || undefined,
-    md,
-    cover: cover || undefined,
-    author: req.session.userInfo._id
-  })
+    let doc = await articleDB.create({
+        title: title || undefined,
+        des: des || undefined,
+        md,
+        cover: cover || undefined,
+        author: req.session.userInfo._id
+    })
 
-  res.send({
-    code: 0,
-    msg: "文章发表成功",
-    data: {id: doc._id}
-  })
+    res.send({
+        code: 0,
+        msg: "文章发表成功",
+        data: {id: doc._id}
+    })
 })
 
 //文章修改
 router.post("/update", async (req, res) => {
-  let {id, doc} = req.body
+    let {id, doc, mdUrl} = req.body
 
-  await articleDB.findByIdAndUpdate(id, doc)
+    if (mdUrl === "/file/cover/default.jpg") {
+        await articleDB.findByIdAndUpdate(id, doc)
+        return res.send({
+            code: 0,
+            msg: "修改成功"
+        })
+    }
+    let url = path.resolve(__dirname, "../../public" + mdUrl)
+    fs.unlinkSync(url)
+    await articleDB.findByIdAndUpdate(id, doc)
 
-  res.send({
-    code: 0,
-    msg: "修改成功"
-  })
+    res.send({
+        code: 0,
+        msg: "修改成功"
+    })
 })
 
 //文章删除
 router.delete("/delete", async (req, res) => {
-  let {id} = req.body
+    let {id, mdUrl, mdCover} = req.body
+    let url = path.resolve(__dirname, "../../public" + mdUrl)
+    let coverUrl = path.resolve(__dirname, "../../public" + mdCover)
+    if (mdCover === "/file/cover/default.jpg") {
+        fs.unlinkSync(url)
+        await articleDB.findByIdAndRemove(id)
+        return res.send({
+            code: 0,
+            msg: "删除完成"
+        })
+    }
+    fs.unlinkSync(url)
+    fs.unlinkSync(coverUrl)
+    await articleDB.findByIdAndRemove(id)
 
-  await articleDB.findByIdAndRemove(id)
-
-  res.send({
-    code: 0,
-    msg: "删除完成"
-  })
+    res.send({
+        code: 0,
+        msg: "删除完成"
+    })
 })
 
 module.exports = router

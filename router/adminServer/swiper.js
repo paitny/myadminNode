@@ -3,8 +3,7 @@ const router = express.Router()
 const multer = require("multer")
 const path = require("path")
 const swiperDB = require("../../db/swiper")
-const fs=require("fs")
-
+const fs = require("fs")
 let md_upload = multer({
     storage: multer.diskStorage({
         //文件存储的目录
@@ -41,11 +40,11 @@ router.post("/swiperAdd", (req, res) => {
 })
 
 //swiper发表
-router.post("/add",async (req,res)=>{
+router.post("/add", async (req, res) => {
 
-    let {swiper}=req.body
+    let {swiper} = req.body
     let doc = await swiperDB.create({
-        swiper:swiper,
+        swiper: swiper,
 
     })
     res.send({
@@ -55,8 +54,10 @@ router.post("/add",async (req,res)=>{
     })
 })
 //swiper轮播图修改
-router.post("/update",async(req,res)=>{
-    let {id,doc}=req.body
+router.post("/update", async (req, res) => {
+    let {id, doc, swUrl} = req.body
+    let url = path.resolve(__dirname, "../../public" + swUrl)
+    fs.unlinkSync(url)
     await swiperDB.findByIdAndUpdate(id, doc)
     res.send({
         code: 0,
@@ -64,8 +65,10 @@ router.post("/update",async(req,res)=>{
     })
 })
 //删除轮播图
-router.post("/delete",async (req,res)=>{
-    let {id}=req.body
+router.post("/delete", async (req, res) => {
+    let {id, swUrl} = req.body
+    let url = path.resolve(__dirname, "../../public" + swUrl)
+    fs.unlinkSync(url)
     await swiperDB.findByIdAndRemove(id)
     res.send({
         code: 0,

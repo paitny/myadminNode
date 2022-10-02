@@ -3,6 +3,7 @@ const router = express.Router()
 const multer = require("multer")
 const path = require("path")
 const VideoDB=require("../../db/video")
+const fs = require("fs");
 let vd_upload = multer({
     storage: multer.diskStorage({
         //文件存储的目录
@@ -87,26 +88,41 @@ router.post("/add",async (req,res)=>{
         data: {id: doc._id}
     })
 })
-//视频修改
+//视频封面以及视频文件修改
 router.post("/update", async (req, res) => {
-    let {id, doc} = req.body
+    let {id, doc,vdUrl} = req.body
 
+    let url = path.resolve(__dirname, "../../public" + vdUrl)
+    if(vdUrl==="/file/videoCover/default.jpg"){
+        await VideoDB.findByIdAndUpdate(id, doc)
+        return  res.send({
+            code: 0,
+            msg: "修改成功"
+        })
+    }
+    fs.unlinkSync(url)
     await VideoDB.findByIdAndUpdate(id, doc)
-
     res.send({
         code: 0,
         msg: "修改成功"
     })
 })
-
-//删除video
-
-//文章删除
+//视频删除
 router.delete("/delete", async (req, res) => {
-    let {id} = req.body
-
+    let {id,videoUrl,coverUrl} = req.body
+    let vdFile = path.resolve(__dirname, "../../public" + videoUrl)
+    let cover = path.resolve(__dirname, "../../public" + coverUrl)
+    if(coverUrl==="/file/videoCover/default.jpg"){
+        fs.unlinkSync(vdFile)
+        await VideoDB.findByIdAndRemove(id)
+       return  res.send({
+            code: 0,
+            msg: "删除完成"
+        })
+    }
+    fs.unlinkSync(vdFile)
+    fs.unlinkSync(cover)
     await VideoDB.findByIdAndRemove(id)
-
     res.send({
         code: 0,
         msg: "删除完成"

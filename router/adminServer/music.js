@@ -4,6 +4,7 @@ const multer = require("multer")
 const path = require("path")
 const musicDB = require("../../db/music")
 const articleDB = require("../../db/article");
+const fs = require("fs");
 
 
 let music_upload = multer({
@@ -107,14 +108,14 @@ router.post("/cover", (req, res) => {
 })
 //音乐发表
 router.post("/add", async (req, res) => {
-    let {name, artist,url,lrc, cover,theme} = req.body
+    let {name, artist, url, lrc, cover, theme} = req.body
     let doc = await musicDB.create({
         name: name || undefined,
-        artist:artist||undefined,
+        artist: artist || undefined,
         url,
         lrc: lrc || undefined,
-        cover:cover||undefined,
-        theme:theme||undefined,
+        cover: cover || undefined,
+        theme: theme || undefined,
     })
 
     res.send({
@@ -125,9 +126,17 @@ router.post("/add", async (req, res) => {
 })
 //音乐修改
 router.post("/update", async (req, res) => {
-    let {id, doc} = req.body
-    await musicDB.findByIdAndUpdate(id,doc)
-
+    let {id, doc, musicUrl} = req.body
+    let url = path.resolve(__dirname, "../../public" + musicUrl)
+    if (musicUrl === "/file/mcover/default.jpg" || musicUrl === "/file/lyric/default.lrc") {
+        await musicDB.findByIdAndUpdate(id, doc)
+        return res.send({
+            code: 0,
+            msg: "修改成功"
+        })
+    }
+    fs.unlinkSync(url)
+    await musicDB.findByIdAndUpdate(id, doc)
     res.send({
         code: 0,
         msg: "修改成功"
@@ -136,25 +145,28 @@ router.post("/update", async (req, res) => {
 
 //音乐删除
 router.delete("/delete", async (req, res) => {
-    let {id} = req.body
-
+    let {id, mcUrl, mcCover, mcLrc} = req.body
+    let musicUrl = path.resolve(__dirname, "../../public" + mcUrl)
+    let musicCover = path.resolve(__dirname, "../../public" + mcCover)
+    let musicLrc = path.resolve(__dirname, "../../public" + mcLrc)
+    if (mcCover === "/file/mcover/default.jpg" || mcLrc==="/file/lyric/default.lrc") {
+        fs.unlinkSync(musicUrl)
+        await musicDB.findByIdAndRemove(id)
+        return res.send({
+            code: 0,
+            msg: "删除完成"
+        })
+    }
+    fs.unlinkSync(musicUrl)
+    fs.unlinkSync(musicCover)
+    fs.unlinkSync(musicLrc)
     await musicDB.findByIdAndRemove(id)
-
     res.send({
         code: 0,
         msg: "删除完成"
     })
 })
 
-router.post("/lrcupdate", async (req, res) => {
-    let {id, doc} = req.body
-    await musicDB.findByIdAndUpdate(id,doc)
-
-    res.send({
-        code: 0,
-        msg: "修改成功"
-    })
-})
 
 module.exports = router
 
