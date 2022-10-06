@@ -6,6 +6,12 @@
     "children": []
   },
   {
+    "path": "/data",
+    "title": "数据分析",
+    "icon": "data",
+    "children": []
+  },
+  {
     "path": "/userManage",
     "title": "用户管理",
     "icon": "personCenter",

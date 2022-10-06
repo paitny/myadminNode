@@ -8,6 +8,8 @@ const swiperDB=require("../../db/swiper")
 const videoDB=require("../../db/video")
 const userDB=require("../../db/user")
 const musicDB=require("../../db/music")
+const contactDB=require("../../db/contact")
+const articleAdminDB=require("../../db/ArticleAdmin")
 const path = require('path')
 // 返回项目功能数组
 router.get('/feature', (req, res) => {
@@ -173,6 +175,33 @@ router.get("/musicAll", async (req, res) => {
     code: 0,
     msg: "请求完成",
     data: doc
+  })
+})
+//计算所有数据
+router.get('/data',async (req,res)=>{
+      let userTotal=await userDB.countDocuments()
+      let MsgTotal=await messageDB.countDocuments()
+      let MusicTotal=await musicDB.countDocuments()
+      let SwiperTotal=await swiperDB.countDocuments()
+      let ArticleTotal=await articleDB.countDocuments()
+      let ContactTotal=await contactDB.countDocuments()
+      let VisitorTotal=await visitorDB.countDocuments()
+      let VideoTotal=await videoDB.countDocuments()
+      let LinkTotal=await linkDB.countDocuments()
+      let AdminArticleTotal=await articleAdminDB.countDocuments()
+  res.send({
+    code: 0,
+    msg: "请求完成",
+    data: {userTotal,
+      MsgTotal,
+      MusicTotal,
+      SwiperTotal,
+      ArticleTotal,
+      ContactTotal,
+      VisitorTotal,
+      VideoTotal,
+      LinkTotal,
+      AdminArticleTotal}
   })
 })
 module.exports = router
