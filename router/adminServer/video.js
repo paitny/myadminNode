@@ -2,7 +2,7 @@ const express = require("express")
 const router = express.Router()
 const multer = require("multer")
 const path = require("path")
-const VideoDB=require("../../db/video")
+const VideoDB = require("../../db/video")
 const fs = require("fs");
 let vd_upload = multer({
     storage: multer.diskStorage({
@@ -75,12 +75,12 @@ router.post("/videoCover", (req, res) => {
 
 
 //video发表
-router.post("/add",async (req,res)=>{
-    let {title,video,videoCover}=req.body
+router.post("/add", async (req, res) => {
+    let {title, video, videoCover} = req.body
     let doc = await VideoDB.create({
         title: title || undefined,
-        video:video|| undefined,
-        videoCover:videoCover||undefined
+        video: video || undefined,
+        videoCover: videoCover || undefined
     })
     res.send({
         code: 0,
@@ -90,12 +90,12 @@ router.post("/add",async (req,res)=>{
 })
 //视频封面以及视频文件修改
 router.post("/update", async (req, res) => {
-    let {id, doc,vdUrl} = req.body
+    let {id, doc, vdUrl} = req.body
 
     let url = path.resolve(__dirname, "../../public" + vdUrl)
-    if(vdUrl==="/file/videoCover/default.jpg"){
+    if (vdUrl === "/file/videoCover/default.jpg" || !vdUrl) {
         await VideoDB.findByIdAndUpdate(id, doc)
-        return  res.send({
+        return res.send({
             code: 0,
             msg: "修改成功"
         })
@@ -109,13 +109,13 @@ router.post("/update", async (req, res) => {
 })
 //视频删除
 router.delete("/delete", async (req, res) => {
-    let {id,videoUrl,coverUrl} = req.body
+    let {id, videoUrl, coverUrl} = req.body
     let vdFile = path.resolve(__dirname, "../../public" + videoUrl)
     let cover = path.resolve(__dirname, "../../public" + coverUrl)
-    if(coverUrl==="/file/videoCover/default.jpg"){
+    if (coverUrl === "/file/videoCover/default.jpg") {
         fs.unlinkSync(vdFile)
         await VideoDB.findByIdAndRemove(id)
-       return  res.send({
+        return res.send({
             code: 0,
             msg: "删除完成"
         })
@@ -128,7 +128,6 @@ router.delete("/delete", async (req, res) => {
         msg: "删除完成"
     })
 })
-
 
 
 module.exports = router

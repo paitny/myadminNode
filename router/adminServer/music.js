@@ -128,7 +128,7 @@ router.post("/add", async (req, res) => {
 router.post("/update", async (req, res) => {
     let {id, doc, musicUrl} = req.body
     let url = path.resolve(__dirname, "../../public" + musicUrl)
-    if (musicUrl === "/file/mcover/default.jpg" || musicUrl === "/file/lyric/default.lrc") {
+    if (musicUrl === "/file/mcover/default.jpg" || musicUrl === "/file/lyric/default.lrc" || !musicUrl) {
         await musicDB.findByIdAndUpdate(id, doc)
         return res.send({
             code: 0,

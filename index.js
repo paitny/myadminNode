@@ -28,7 +28,9 @@ app.get("*", (req, res)=>{
 app.get("./", (req, res)=>{
   res.sendFile( require("path").join(__dirname, './public/myadmin/index.html') )
 })
-
+app.get("./", (req, res)=>{
+  res.sendFile( require("path").join(__dirname, './public/sport/index.html') )
+})
 app.listen(4000, () => {
   console.log("服务启动，端口4000")
 })
